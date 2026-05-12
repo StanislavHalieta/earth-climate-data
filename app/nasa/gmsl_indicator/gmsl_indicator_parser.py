@@ -1,6 +1,6 @@
 import math
 
-def parse_po_dac_data(data_list):
+def format_gmsl_indicator_data(data_list):
     if len(data_list) < 2: return {"error": "Critical data insufficiency"}
 
     CRITICAL_THRESHOLD = 2000.0 

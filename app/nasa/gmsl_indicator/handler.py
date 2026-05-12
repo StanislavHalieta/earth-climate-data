@@ -1,10 +1,10 @@
 import re
 from flask import jsonify
 from app.helpers.date_parsers import decimal_to_date # припустимо, він там
-from app.helpers.po_daac_parser import parse_po_dac_data   # припустимо, він там
+from app.nasa.gmsl_indicator.gmsl_indicator_parser import format_gmsl_indicator_data   # припустимо, він там
 
 
-def get_clean_nasa_data(raw_data: str):
+def format_gmsl_indicator_data(raw_data: str):
     # Логіка парсингу хедера
     if isinstance(raw_data, str):
         parts = re.split(r'HDR Header_End-+', raw_data)
@@ -29,7 +29,7 @@ def get_clean_nasa_data(raw_data: str):
                     continue # Пропускаємо биті рядки
 
         # Твоя фінальна обробка
-        final_result = parse_po_dac_data(json_list)
+        final_result = format_gmsl_indicator_data(json_list)
     else:
         return jsonify({"error": "Невірний формат даних"}), 500
 

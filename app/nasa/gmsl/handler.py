@@ -1,16 +1,22 @@
-from flask import jsonify
-from app.helpers.http_request import HTTPRequest # твій клас
+import os
+
+from app.helpers.http_request import HTTPRequest
+from app.helpers import parse_dap_csv
+from app.nasa.session import create_nasa_session # твій клас
+
 
 
 def get_current_sea_level():
-    # Використовуємо наш універсальний клас
-    client = HTTPRequest(base_url="https://climate.nasa.gov")
+    session = create_nasa_session() 
+    # session має використовувати AUTH (Basic або Bearer)
     
-    # Припустимо, ми забираємо дані (ендпоінт для прикладу)
-    data = client.get("/api/v1/gmsl")
+    url = os.getenv("OPENDAP_URL") + "/collections/C2491724765-POCLOUD/granules/global_timeseries_measures.dap.csv"
     
-    return jsonify({
-        "module": "NASA GML",
-        "raw_data": data,
-        "hazard_index": "TENSOR_ACCELERATION_V16" 
-    })
+    response = session.get(url)
+    
+    if response.status_code == 200:
+        # return response.text # Тут буде твій CSV
+        data_json = parse_dap_csv(response.text)  # Конвертуємо CSV у JSON
+        return data_json
+    else:
+        return f"Помилка: {response.status_code}"

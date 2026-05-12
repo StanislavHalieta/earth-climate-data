@@ -2,10 +2,9 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 
-from app.nasa.pdaac.handler import get_clean_nasa_data
+from app.nasa.gmsl_indicator.handler import format_gmsl_indicator_data
 from app.helpers import HTTPRequest
 from app.nasa import nasa_bp
-# from app.nasa.nasa_pdaac.handler import get_clean_nasa_data
 print(f"DEBUG: PODAAC URL is {os.getenv('ARCHIVE_PODAAC_URL')}")
 # 1. Завантажуємо змінні з .env файлу в пам'ять
 load_dotenv()
@@ -14,7 +13,7 @@ app = Flask(__name__)
 
 app.register_blueprint(nasa_bp, url_prefix="/api/nasa")
 
-@app.route("/api/dummy-data")
+@app.route("/api/dummy_data")
 def get_dummy_data():
     new_request = HTTPRequest(
     base_url="https://dummyjson.com",
@@ -50,7 +49,7 @@ def dummy_auth():
     
     return {"error": "Auth failed"}, 401
 
-@app.route("/api/dummy-post", methods=["GET", "POST"])
+@app.route("/api/dummy_post", methods=["GET", "POST"])
 def dummy_post():
     new_request = HTTPRequest(base_url="https://dummyjson.com")
     
