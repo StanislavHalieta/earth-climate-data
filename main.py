@@ -6,7 +6,7 @@ from app.nasa.pdaac.handler import get_clean_nasa_data
 from app.helpers import HTTPRequest
 from app.nasa import nasa_bp
 # from app.nasa.nasa_pdaac.handler import get_clean_nasa_data
-
+print(f"DEBUG: PODAAC URL is {os.getenv('ARCHIVE_PODAAC_URL')}")
 # 1. Завантажуємо змінні з .env файлу в пам'ять
 load_dotenv()
 
@@ -28,8 +28,8 @@ def get_dummy_data():
 def dummy_auth():
     new_request = HTTPRequest(
     base_url=os.getenv("ARCHIVE_PODAAC_URL"),
-    username=os.getenv("NASA_USERNAME"),
-    password=os.getenv("NASA_PASSWORD")
+    username=os.getenv("NASA_USER"),
+    password=os.getenv("NASA_PASS")
 )
 
     data = new_request.get(endpoint=os.getenv("NASA_SSH_GMSL_INDICATOR_URL").lstrip('/'))

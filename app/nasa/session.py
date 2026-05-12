@@ -8,7 +8,7 @@ def create_nasa_session():
     # 1. Збираємо дані з .env
     user = os.getenv("NASA_USER")
     password = os.getenv("NASA_PASS")
-    raw_base_url = os.getenv("ARCHIVE_PODAAC_URL")
+    raw_base_url = os.getenv("ARCHIVE_PODAAC_URL")  # Можливо, це буде NASA_BASE_URL або ARCHIVE_PODAAC_URL, залежно від структури .env
 
     # 2. Перевірка наявності облікових даних та URL
     if not all([user, password, raw_base_url]):

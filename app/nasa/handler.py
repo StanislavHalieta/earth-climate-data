@@ -8,7 +8,7 @@ from app.nasa.session import create_nasa_session
 
 load_dotenv()
 
-nasa_bp = Blueprint("nasa", __name__)
+nasa_bp = Blueprint("NASA", __name__)
 
 @nasa_bp.route("/GMSL")
 def fetch_gmsl_indicator_raw():
