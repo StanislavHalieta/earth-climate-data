@@ -1,10 +1,9 @@
 import re
 from flask import jsonify
 from app.helpers.date_parsers import decimal_to_date # припустимо, він там
-from app.nasa.gmsl_indicator.gmsl_indicator_parser import format_gmsl_indicator_data   # припустимо, він там
+from .gmsl_indicator_parser import format_gmsl_indicator_data
 
-
-def format_gmsl_indicator_data(raw_data: str):
+def gmsl_indicator_data(raw_data: str):
     # Логіка парсингу хедера
     if isinstance(raw_data, str):
         parts = re.split(r'HDR Header_End-+', raw_data)

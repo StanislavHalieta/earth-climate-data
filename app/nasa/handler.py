@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from flask import Blueprint
 
 from app.nasa.gmsl.handler import get_current_sea_level
-from app.nasa.gmsl_indicator.handler import format_gmsl_indicator_data
+from app.nasa.gmsl_indicator.handler import gmsl_indicator_data
 from app.nasa.session import create_nasa_session
 
 
@@ -20,7 +20,7 @@ def fetch_gmsl_indicator_raw():
     if response.status_code != 200:
         return {"error": f"NASA Indicator Error: {response.status_code}"}
     
-    return format_gmsl_indicator_data(response.text)
+    return gmsl_indicator_data(response.text)
 
 @nasa_bp.route("/GMSL")
 def gmsl_endpoint():        

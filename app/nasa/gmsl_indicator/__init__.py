@@ -1,2 +1,1 @@
 from .handler import format_gmsl_indicator_data
-from .gmsl_indicator_parser import format_gmsl_indicator_data
