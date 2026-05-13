@@ -1,6 +1,7 @@
 from typing import Any, Optional
 
 import requests
+from requests.auth import HTTPBasicAuth
 
 class HTTPRequest:
     def __init__(
@@ -11,21 +12,17 @@ class HTTPRequest:
         auth_token: str | int | None = None
         ):
         
-        # Гвардіан-клінінг: перевіряємо, чи base_url це дійсно рядок
         if not isinstance(base_url, str):
             raise TypeError(f"Expected str for base_url, got {type(base_url).__name__}")
         
         self.base_url = base_url.rstrip('/')
-        
-        # Створюємо сесію. Сесія в requests — це як браузер: 
-        # вона пам'ятає куки та краще обробляє редиректи.
+        self.username = username
+        self.password = password
         self.session = requests.Session()
         
-        # Якщо є логін/пароль (як для NASA Earthdata), додаємо їх у сесію
         if username and password:
             self.session.auth = (username, password)
             
-        # Якщо є Bearer токен (для інших API)
         if auth_token:
             self.session.headers.update({"Authorization": f"Bearer {auth_token}"})
             
@@ -35,41 +32,39 @@ class HTTPRequest:
         })
 
     def _make_request(self, method, endpoint, data=None, params=None, auth_required=False):
-        """
-        auth_required: якщо True, ми можемо додати специфічну логіку 
-        для перевірки авторизації перед відправкою.
-        """
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
-        
+
+        auth = HTTPBasicAuth(self.username, self.password) if self.username and self.password else None
+
         try:
-            # Використовуємо self.session замість requests
-            # handle_redirects=True дозволяє requests слідувати за посиланнями
             response = self.session.request(
                 method=method,
                 url=url,
                 json=data,
                 params=params,
-                allow_redirects=True  # Важливо для NASA
+                auth=auth,
+                allow_redirects=True
             )
-            
-            # Якщо NASA вимагає підтвердження авторизації при редиректі
-            # requests зазвичай робить це автоматично, якщо сесія має .auth
-            
+
+            if "text/html" in response.headers.get("Content-Type", "").lower():
+                response = self.session.request(
+                    method=method,
+                    url=url,
+                    allow_redirects=True
+                )
+
             response.raise_for_status()
-            
-            try:
+
+            content_type = response.headers.get("Content-Type", "").lower()
+            if "application/json" in content_type:
                 return response.json()
-            except ValueError:
-                return response.text
-                
-        except requests.exceptions.HTTPError as err:
-            # Якщо отримали 401 Unauthorized — значить авторизація не спрацювала
-            if err.response.status_code == 401:
-                return {"error": "Auth Failed", "message": "Check your credentials"}
-            return {"error": f"HTTP {err.response.status_code}", "message": str(err)}
+
+            if endpoint.endswith('.nc'):
+                return response.content
+
+            return response.text
         except Exception as err:
             return {"error": "Request failed", "message": str(err)}
-    
     # Методи get, post і т.д.
     def get(self, endpoint, params=None, auth_required=False):
         return self._make_request("GET", endpoint, params=params, auth_required=auth_required)
@@ -80,13 +75,6 @@ class HTTPRequest:
         data: Optional[dict | list] = None, 
         params: Optional[dict] = None
     ) -> Any:
-        """
-        Метод для відправки POST запитів.
-        :param endpoint: Шлях до ресурсу (наприклад, '/products/add')
-        :param data: Тіло запиту (словник або список), яке конвертується в JSON
-        :param params: URL параметри (те, що йде після ?)
-        """
-        # Додаємо перевірку типів "на льоту" (Runtime check)
         if not isinstance(endpoint, str):
             raise TypeError(f"Endpoint must be str, got {type(endpoint).__name__}")
             

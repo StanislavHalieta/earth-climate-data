@@ -1,1 +1,2 @@
 from .handler import format_gmsl_indicator_data
+from .handler import get_gmsl_indicator_data
