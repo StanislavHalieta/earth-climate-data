@@ -32,4 +32,5 @@ def gmsl_indicator_data(raw_data: str):
     else:
         return jsonify({"error": "Невірний формат даних"}), 500
 
-    return jsonify(final_result)
+    # return jsonify(final_result)
+    return json_list

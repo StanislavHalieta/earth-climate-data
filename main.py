@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from app.nasa.gmsl_indicator.handler import format_gmsl_indicator_data
 from app.helpers import HTTPRequest
 from app.nasa import nasa_bp
-print(f"DEBUG: PODAAC URL is {os.getenv('ARCHIVE_PODAAC_URL')}")
+
+
 # 1. Завантажуємо змінні з .env файлу в пам'ять
 load_dotenv()
 

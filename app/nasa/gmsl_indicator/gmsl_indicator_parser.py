@@ -11,7 +11,6 @@ def format_gmsl_indicator_data(data_list):
     timespan = t_last - t_first
     observed_rise = h_last - h_first
 
-    # АНАЛІЗ ТРЕНДІВ
     v_total = observed_rise / timespan if timespan > 0 else 0
     # Останні 10% масиву (адаптивне вікно для будь-якої довжини даних)
     window = max(2, len(data_list) // 10)

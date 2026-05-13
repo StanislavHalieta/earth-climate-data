@@ -15,3 +15,7 @@ def decimal_to_date(decimal_year):
     
     # Повертаємо у форматі YYYY-MM-DD
     return result_date.strftime('%d-%m-%Y')
+
+def index_to_date(index):
+    base_date = datetime(1, 1, 1992)
+    return (base_date + timedelta(days=int(index))).strftime('%d-%m-%Y')
