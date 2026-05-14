@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from app.helpers import HTTPRequest
 from app.nasa import nasa_bp
-
+from app.noaa.handler import noaa_bp
 
 # 1. Завантажуємо змінні з .env файлу в пам'ять
 load_dotenv()
@@ -12,6 +12,7 @@ load_dotenv()
 app = Flask(__name__)
 
 app.register_blueprint(nasa_bp, url_prefix="/api/nasa")
+app.register_blueprint(noaa_bp, url_prefix="/api/noaa")
 
 @app.route("/api/dummy_data")
 def get_dummy_data():

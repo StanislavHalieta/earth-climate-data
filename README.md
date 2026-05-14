@@ -21,6 +21,8 @@ app/
 ├── main.py              # Точка входу Flask
 └── .env                 # Конфігурація (не додається в Git)
 
+
+## 🛠 Налаштування
 # Облікові дані NASA Earthdata (URS)
 NASA_USER=your_username
 NASA_PASS=your_password
