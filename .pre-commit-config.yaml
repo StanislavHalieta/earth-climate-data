@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: update-readme-endpoints
+        name: Auto-update README
+        entry: poetry run python update_docs.py
+        language: system
+        files: ^app/constants/routes\.py$
+        pass_filenames: false
+
+      - id: poetry-export
+        name: Poetry Export Requirements
+        entry: poetry export -f requirements.txt --output requirements.txt --without-hashes
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: run-tests
+        name: Run Pytest
+        entry: poetry run python -m pytest
+        language: system
+        pass_filenames: false
+        always_run: true

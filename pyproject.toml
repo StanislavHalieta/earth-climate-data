@@ -1,0 +1,31 @@
+[project]
+name = "earth-climate-data"
+version = "0.1.0"
+description = ""
+package-mode = false
+authors = [
+    {name = "Deimos",email = "deimos1488@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "xarray (>=2026.4.0,<2027.0.0)",
+    "netcdf4 (>=1.7.4,<2.0.0)",
+    "h5netcdf (>=1.8.1,<2.0.0)",
+    "h5py (>=3.16.0,<4.0.0)",
+    "cftime (>=1.6.5,<2.0.0)",
+    "bs4 (>=0.0.2,<0.0.3)",
+    "beautifulsoup4 (>=4.14.3,<5.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.3,<10.0.0)",
+    "pre-commit (>=4.6.0,<5.0.0)"
+]
