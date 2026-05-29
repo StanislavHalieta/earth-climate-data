@@ -1,6 +1,20 @@
 REGISTERED_ROUTE_CLASSES = []
 FULL_ROUTES_FOR_README = []
 
+
+# --- ГЕНЕРАТОР ТАБЛИЦІ ---
+def generate_readme_table() -> str:
+    """Генерує чистий Markdown-текст таблиці для README."""
+    markdown_lines = ["| Назва маршруту | URL / Шлях |", "| :--- | :--- |"]
+    
+    # Сортуємо наш новий масив за назвою для красивого вигляду
+    FULL_ROUTES_FOR_README.sort(key=lambda x: x[0])
+    
+    for key, value in FULL_ROUTES_FOR_README:
+        markdown_lines.append(f"| **{key}** | `{value}` |")
+        
+    return "\n".join(markdown_lines)
+
 # Декоратор, який автоматично реєструє класи для документації
 def register_routes(cls):
     if cls not in REGISTERED_ROUTE_CLASSES:
@@ -66,17 +80,3 @@ class VostokRoutes:
     CH4NAT = "/ch4nat"
     DUSTNAT = "/dustnat"
     N2O_ISO = "/n2o_iso"
-    
-# --- ГЕНЕРАТОР ТАБЛИЦІ ---
-
-def generate_readme_table() -> str:
-    """Генерує чистий Markdown-текст таблиці для README."""
-    markdown_lines = ["| Назва маршруту | URL / Шлях |", "| :--- | :--- |"]
-    
-    # Сортуємо наш новий масив за назвою для красивого вигляду
-    FULL_ROUTES_FOR_README.sort(key=lambda x: x[0])
-    
-    for key, value in FULL_ROUTES_FOR_README:
-        markdown_lines.append(f"| **{key}** | `{value}` |")
-        
-    return "\n".join(markdown_lines)

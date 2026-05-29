@@ -3,6 +3,7 @@ from flask import Blueprint
 from app.api.noaa.vostok import vostok_bp
 from app.constants import (Blueprints, ApiRoutes)
 
+from app.api.noaa.sync import sync_noaa_data
 from app.api.noaa.session import create_noaa_session
 from app.api.noaa.ocean_pentad_heat.ocean_pentad_heat_data import parse_ocean_pentad_heat_data
 from app.api.noaa.relative_sea_level.relative_sea_level_parser import parse_relative_sea_level_data
@@ -22,7 +23,8 @@ from . import handler
 
 __all__ = [
     "noaa_bp",
-    "create_noaa_session"
+    "sync_noaa_data",
+    "create_noaa_session",
     "parse_ocean_pentad_heat_data",
     "parse_relative_sea_level_data",
     "parse_noaa_ice_data",

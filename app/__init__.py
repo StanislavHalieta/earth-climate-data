@@ -1,6 +1,5 @@
 from flask import Flask
 
-from app.constants import BaseRoutes
 from app.api import api_bp
 
 

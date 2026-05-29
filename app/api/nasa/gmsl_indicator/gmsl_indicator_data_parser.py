@@ -2,7 +2,7 @@ import re
 from flask import jsonify
 from app.helpers.date_parsers import decimal_to_date 
 
-def calculate_gmsl_indicator_index(raw_data: str):
+def parse_gmsl_indicator_data(raw_data: str):
     if isinstance(raw_data, str):
         parts = re.split(r'HDR Header_End-+', raw_data)
         if len(parts) < 2:

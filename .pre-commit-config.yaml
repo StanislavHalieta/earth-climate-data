@@ -1,26 +1,45 @@
+# .pre-commit-config.yaml
 default_stages: [pre-commit]
 
 repos:
   - repo: local
     hooks:
+      # 1. Спершу запускаємо генератор тестів, щоб папка tests/ завжди була актуальною
+      - id: generate-universal-tests
+        name: 🧪 Auto-generate universal tests
+        entry: cmd /c poetry run python generate_tests.py
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      # 2. Оновлюємо документацію README на основі роутів
       - id: update-readme-endpoints
-        name: Auto-update README
-        entry: poetry run python update_docs.py
+        name: 📝 Auto-update README docs
+        entry: cmd /c poetry run python update_docs.py
         language: system
         files: ^app/constants/routes\.py$
         pass_filenames: false
 
+      # 3. Експортуємо залежності у requirements.txt для Render
       - id: poetry-export
-        name: Poetry Export Requirements
-        # cmd /c викликає глобальну poetry, яка надійно відпрацює у Windows
-        entry: cmd /c poetry export -f requirements.txt --output requirements.txt --without-hashes
+        name: 📦 Poetry Export Requirements
+        entry: cmd /c poetry run poetry export -f requirements.txt --output requirements.txt --without-hashes
         language: system
         pass_filenames: false
         always_run: true
-        
+
+      # 4. Автоматично додаємо всі згенеровані зміни (тести, реквáйрментс, рідмі) до поточного коміту
+      - id: git-add-generated-files
+        name: 🔄 Git add auto-generated changes
+        entry: cmd /c git add tests/test_all_parsers.py requirements.txt README.md
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      # 5. Фінальний акорд: запускаємо тести. Якщо вони впадуть — коміт заблокується
       - id: run-tests
-        name: Run Pytest
-        entry: poetry run python -m pytest
+        name: 🚀 Run Pytest verification
+        entry: cmd /c set PYTHONPATH=.&& poetry run python -m pytest
         language: system
         pass_filenames: false
         always_run: true

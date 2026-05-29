@@ -1,7 +1,7 @@
 import os
 import logging
 from urllib.parse import urlparse
-from app.helpers import HTTPRequest
+from app.services import HTTPRequest
 
 logger = logging.getLogger(__name__)
 

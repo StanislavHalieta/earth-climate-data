@@ -12,4 +12,5 @@ api_bp.register_blueprint(noaa_bp)
 api_bp.register_blueprint(nasa_bp)
 api_bp.register_blueprint(peltier_bp)
 
+
 __all__ = ["api_bp"]

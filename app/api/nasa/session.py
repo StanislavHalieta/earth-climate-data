@@ -1,6 +1,6 @@
 import os
 from flask.cli import load_dotenv
-from app.helpers import HTTPRequest
+from app.services import HTTPRequest
 
 load_dotenv()
 

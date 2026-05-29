@@ -94,6 +94,9 @@ FLASK_ENV=True
 NASA_USER=
 NASA_PASS=
 NASA_TOKEN=
+
+DB_PASS=
+DATABASE_URL=
 #END_ACCESS
 
 NASA_ARCHIVE_GESDISC_URL=https://acdisc.gesdisc.eosdis.nasa.gov
@@ -211,7 +214,7 @@ app/
 │   │   │   └── nc_nasa_parser.py
 │   │   ├── gmsl_indicator/
 │   │   │   ├── __init__.py
-│   │   │   ├── calculate_index.py
+│   │   │   ├── gmsl_indicator_data_parser.py
 │   │   │   └── gmsl_indicator_parser.py
 │   │   ├── handler.py
 │   │   ├── ozone/
@@ -219,9 +222,10 @@ app/
 │   │   │   ├── fresh_link_generator.py
 │   │   │   └── ozone_data_parser.py
 │   │   ├── session.py
-│   │   └── stratospheric_aerosol/
-│   │       ├── __init__.py
-│   │       └── stratospheric_aerosol_parser.py
+│   │   ├── stratospheric_aerosol/
+│   │   │   ├── __init__.py
+│   │   │   └── stratospheric_aerosol_parser.py
+│   │   └── sync.py
 │   ├── noaa/
 │   │   ├── __init__.py
 │   │   ├── co2_mauna_loa/
@@ -253,6 +257,7 @@ app/
 │   │   │   ├── __init__.py
 │   │   │   └── relative_sea_level_summary_parser.py
 │   │   ├── session.py
+│   │   ├── sync.py
 │   │   └── vostok/
 │   │       ├── __init__.py
 │   │       ├── ch4nat/
@@ -274,18 +279,23 @@ app/
 │   └── peltier/
 │       ├── __init__.py
 │       ├── handler.py
-│       └── peltier_data_parser.py
+│       ├── peltier_data_parser.py
+│       └── sync.py
 ├── constants/
 │   ├── __init__.py
 │   ├── blueprints_names.py
 │   └── routes.py
-└── helpers/
+├── helpers/
+│   ├── __init__.py
+│   ├── csv_converter.py
+│   ├── custom_json_provider.py
+│   ├── date_parsers.py
+│   ├── decompress_gz.py
+│   ├── extract_file_from_zip.py
+│   └── extract_json.py
+└── services/
     ├── __init__.py
-    ├── csv_converter.py
-    ├── custom_json_provider.py
-    ├── date_parsers.py
-    ├── decompress_gz.py
-    ├── extract_file_from_zip.py
+    ├── db_service.py
     └── http_request.py
 ├── main.py
 ├── update_docs.py
