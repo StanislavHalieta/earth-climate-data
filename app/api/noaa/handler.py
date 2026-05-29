@@ -2,19 +2,22 @@ import os
 
 from dotenv import load_dotenv
 
-from app.api.noaa.enso_nio34.enso_nino34_parser import parse_enso_nino34_data
-from app.api.noaa.methane import parse_nc_daily_methane
-from app.api.noaa.ratpac_a import parse_ratpac_data
 from app.constants import NoaaRoutes
 
 from app.helpers import extract_file_from_zip_parser
+
 from app.api.noaa import (noaa_bp,
                             create_noaa_session,
                             parse_ocean_pentad_heat_data,
                             parse_noaa_ice_data,
                             parse_noaa_paleo_sea_level_data,
                             parse_relative_sea_level_data,
-                            parse_relative_sea_level_summary_data)
+                            parse_relative_sea_level_summary_data,
+                            parse_enso_nino34_data,
+                            parse_co2_mauna_loa,
+                            parse_nc_daily_methane,
+                            parse_ratpac_data
+                            )
 
 load_dotenv()
 
@@ -173,5 +176,15 @@ def get_enso_nino34_data():
     
     raw_data = create_noaa_session(base_url=base_url, endpoint=endpoint)
     parsed_data = parse_enso_nino34_data(raw_data)
+    
+    return parsed_data
+
+@noaa_bp.route(NoaaRoutes.CO2_MAUNA_LOA, methods=["GET"])
+def get_co2_mauna_loa_data():
+    base_url = os.getenv("NOAA_GML_BASE_URL")
+    endpoint = os.getenv("NOAA_CO2_MAUNA_LOA")
+    
+    raw_data = create_noaa_session(base_url=base_url, endpoint=endpoint)
+    parsed_data = parse_co2_mauna_loa(raw_data)
     
     return parsed_data

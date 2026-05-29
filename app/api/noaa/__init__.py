@@ -9,7 +9,10 @@ from app.api.noaa.relative_sea_level.relative_sea_level_parser import parse_rela
 from app.api.noaa.noaa_ice_extent.noaa_ice_data_parser import parse_noaa_ice_data
 from app.api.noaa.paleo_sea_level.noaa_paleo_parser import parse_noaa_paleo_sea_level_data
 from app.api.noaa.relative_sea_level_summary.relative_sea_level_summary_parser import parse_relative_sea_level_summary_data
-
+from app.api.noaa.co2_mauna_loa.co2_mauna_loa_parser import parse_co2_mauna_loa
+from app.api.noaa.enso_nio34.enso_nino34_parser import parse_enso_nino34_data
+from app.api.noaa.methane.methane_parser import parse_nc_daily_methane
+from app.api.noaa.ratpac_a.ratpac_text_parser import parse_ratpac_data
 
 noaa_bp = Blueprint(Blueprints.NOAA, __name__, url_prefix=ApiRoutes.NOAA)
 
@@ -25,4 +28,8 @@ __all__ = [
     "parse_noaa_ice_data",
     "parse_noaa_paleo_sea_level_data",
     "parse_relative_sea_level_summary_data",
+    "parse_enso_nino34_data",
+    "parse_co2_mauna_loa",
+    "parse_nc_daily_methane",
+    "parse_ratpac_data"
 ]

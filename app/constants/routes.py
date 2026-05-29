@@ -47,6 +47,7 @@ class NoaaRoutes:
     SUNSPOT = "/sunpot"
     KP_INDEX = "/kp_index"
     ENSO_NINO34="/enso_nio34"
+    CO2_MAUNA_LOA = "/co2_mauna_loa"
 
 @register_routes
 @with_prefix(f"{BaseRoutes.API}{ApiRoutes.NASA}")

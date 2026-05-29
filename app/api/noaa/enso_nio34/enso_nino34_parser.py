@@ -1,11 +1,10 @@
 def parse_enso_nino34_data(raw_data: str) -> dict:
+    # Перевіряємо щоб був текст, якщо ні то декодуємо бінарні дані
     if isinstance(raw_data, bytes):
         raw_text = raw_data.decode('utf-8')
     else:
         raw_text = raw_data
-    """
-    Парсить текстові дані індексів NOAA Niño (SST та ANOM).
-    """
+
     parsed_results = []
     
     # Розбиваємо текст на рядки

@@ -138,7 +138,7 @@ NOAA_SOLAR_FLUX=/json/f107_cm_flux.json
 NOAA_SUNSPOT=/json/solar-cycle/sunspots.json
 NOAA_KP_INDEX=/json/planetary_k_index_1m.json
 NOAA_ENSO_NINO34=/data/indices/ersst5.nino.mth.91-20.ascii
-
+NOAA_CO2_MAUNA_LOA=/webdata/ccgg/trends/co2/co2_mm_mlo.csv
 
 PELTIER_BASE_URL=https://www.atmosp.physics.utoronto.ca
 PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
@@ -161,6 +161,7 @@ PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
 | :--- | :--- |
 | **CH4NAT** | `/api/noaa/vostok/ch4nat` |
 | **CO2NAT** | `/api/noaa/vostok/co2nat` |
+| **CO2_MAUNA_LOA** | `/api/noaa/co2_mauna_loa` |
 | **DUSTNAT** | `/api/noaa/vostok/dustnat` |
 | **ENSO_NINO34** | `/api/noaa/enso_nio34` |
 | **GISTEMP** | `/api/nasa/gistemp` |
@@ -223,6 +224,9 @@ app/
 │   │       └── stratospheric_aerosol_parser.py
 │   ├── noaa/
 │   │   ├── __init__.py
+│   │   ├── co2_mauna_loa/
+│   │   │   ├── __init__.py
+│   │   │   └── co2_mauna_loa_parser.py
 │   │   ├── enso_nio34/
 │   │   │   ├── __init__.py
 │   │   │   └── enso_nino34_parser.py
