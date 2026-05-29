@@ -19,7 +19,6 @@ def with_prefix(prefix: str):
         return cls
     return decorator
 
-
 class BaseRoutes:
     API = "/api"
 
@@ -47,6 +46,7 @@ class NoaaRoutes:
     SOLAR_FLUX = "/solar_flux"
     SUNSPOT = "/sunpot"
     KP_INDEX = "/kp_index"
+    ENSO_NINO34="/enso_nio34"
 
 @register_routes
 @with_prefix(f"{BaseRoutes.API}{ApiRoutes.NASA}")

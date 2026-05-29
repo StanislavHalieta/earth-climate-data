@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
+from app.api.noaa.enso_nio34.enso_nino34_parser import parse_enso_nino34_data
 from app.api.noaa.methane import parse_nc_daily_methane
 from app.api.noaa.ratpac_a import parse_ratpac_data
 from app.constants import NoaaRoutes
@@ -164,3 +165,13 @@ def get_kp_index_data():
     kp_index_data = create_noaa_session(base_url=base_url,endpoint=endpoint)
     
     return kp_index_data
+
+@noaa_bp.route(NoaaRoutes.ENSO_NINO34, methods=["GET"])
+def get_enso_nino34_data():
+    base_url = os.getenv("NOAA_CPC_BASE_URL")
+    endpoint = os.getenv("NOAA_ENSO_NINO34")
+    
+    raw_data = create_noaa_session(base_url=base_url, endpoint=endpoint)
+    parsed_data = parse_enso_nino34_data(raw_data)
+    
+    return parsed_data

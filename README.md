@@ -17,16 +17,16 @@
 
 Встановіть Poetry та pre-commit у вашу систему, розгорніть проєкт ініціалізуйте хуки:
 
-```bash
-# Встановлення Poetry (для систем на базі pip)
-pip install poetry
+  ```bash
+  # Встановлення Poetry (для систем на базі pip)
+  pip install poetry
 
-# Встановлення всіх залежностей проєкту
-poetry install
+  # Встановлення всіх залежностей проєкту
+  poetry install
 
-# Ініціалізація pre-commit хуків для автоматизації
-poetry run pre-commit install
-```
+  # Ініціалізація pre-commit хуків для автоматизації
+  poetry run pre-commit install
+  ```
 
 ## 🚀 Запуск коду та розробка
 
@@ -54,7 +54,7 @@ poetry run pre-commit install
 
 Якщо ви хочете запустити генерацію дерева та ендпоінтів вручну (без створення коміту), виконайте:
   ```bash
-    poetry run pre-commit run --all-files
+  poetry run pre-commit run --all-files
   ```
 
 ### ➕ Робота з бібліотеками
@@ -114,6 +114,7 @@ NOAA_BASE_URL=https://www.ncei.noaa.gov
 NOAA_DAILY_ICE_URL=https://noaadata.apps.nsidc.org
 NOAA_GML_BASE_URL=https://gml.noaa.gov
 NOAA_SERVICES_BASE_URL=https://services.swpc.noaa.gov
+NOAA_CPC_BASE_URL=https://www.cpc.ncep.noaa.gov
 
 # URLs generated automatically 
 # NOAA_ICE_URL=/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v4.0.csv
@@ -136,6 +137,8 @@ NOAA_PALEO_VOSTOK_N2O=/pub/data/paleo/icecore/antarctica/vostok/vostok_n2o_iso.t
 NOAA_SOLAR_FLUX=/json/f107_cm_flux.json
 NOAA_SUNSPOT=/json/solar-cycle/sunspots.json
 NOAA_KP_INDEX=/json/planetary_k_index_1m.json
+NOAA_ENSO_NINO34=/data/indices/ersst5.nino.mth.91-20.ascii
+
 
 PELTIER_BASE_URL=https://www.atmosp.physics.utoronto.ca
 PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
@@ -149,9 +152,9 @@ PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
 
 Доступні маршрути для отримання оброблених кліматичних даних:
 
-```text
-    constants/routes.py
-```
+  ```text
+  constants/routes.py
+  ```
 <!-- START_ROUTES_TABLE -->
 
 | Назва маршруту | URL / Шлях |
@@ -159,6 +162,7 @@ PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
 | **CH4NAT** | `/api/noaa/vostok/ch4nat` |
 | **CO2NAT** | `/api/noaa/vostok/co2nat` |
 | **DUSTNAT** | `/api/noaa/vostok/dustnat` |
+| **ENSO_NINO34** | `/api/noaa/enso_nio34` |
 | **GISTEMP** | `/api/nasa/gistemp` |
 | **GMSL** | `/api/nasa/gmsl` |
 | **GMSL_INDICATOR** | `/api/nasa/gmsl_indicator` |
@@ -219,6 +223,9 @@ app/
 │   │       └── stratospheric_aerosol_parser.py
 │   ├── noaa/
 │   │   ├── __init__.py
+│   │   ├── enso_nio34/
+│   │   │   ├── __init__.py
+│   │   │   └── enso_nino34_parser.py
 │   │   ├── handler.py
 │   │   ├── methane/
 │   │   │   ├── __init__.py
