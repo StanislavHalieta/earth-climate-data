@@ -44,8 +44,12 @@ class HTTPRequest:
 
     def _make_request(self, method, endpoint, data=None, params=None, auth_required=False):
         # Якщо endpoint є повним URL, використовуємо його, інакше склеюємо з base_url
+        if endpoint is None:
+            endpoint = ""
+            
         if endpoint.startswith(('http://', 'https://')):
             url = endpoint
+            
         else:
             url = f"{self.base_url}/{endpoint.lstrip('/')}"
         

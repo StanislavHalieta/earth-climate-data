@@ -2,7 +2,13 @@ import pandas as pd
 import io
 import numpy as np
 
-def parse_vostok_co2_data(raw_text):
+def parse_vostok_co2_data(raw_data):
+    
+    if isinstance(raw_data, bytes):
+        raw_text = raw_data.decode('utf-8')
+    else:
+        raw_text = raw_data
+        
     if not isinstance(raw_text, str):
         return {"status": "error", "message": f"Очікувався рядок, отримано {type(raw_text)}"}
 

@@ -7,7 +7,12 @@ def parse_gistemp_data(raw_bytes) -> list:
     Приймає дані з response.content (bytes).
     """
     # Декодуємо байтовий рядок у текст
-    raw_text = raw_bytes.decode("utf-8")
+    if isinstance(raw_bytes, bytes):
+        raw_text = raw_bytes.decode("utf-8")
+    elif isinstance(raw_bytes, str):
+        raw_text = raw_bytes
+    else:
+        raise TypeError(f"Неочікуваний тип даних для парсингу: {type(raw_text)}")
 
     result = []
     
