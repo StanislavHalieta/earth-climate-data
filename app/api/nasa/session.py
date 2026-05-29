@@ -13,7 +13,7 @@ def create_nasa_session(base_url=None) -> HTTPRequest:
     session = HTTPRequest(
         base_url=raw_base_url,
         auth_token=auth_token,
-        password=nasa_user,
-        username=nasa_pass
+        username=nasa_pass,
+        password=nasa_user
     )
     return session

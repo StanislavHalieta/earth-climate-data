@@ -3,12 +3,6 @@ from io import StringIO
 from unittest.mock import MagicMock, Mock
 
 def parse_co2_mauna_loa(raw_data: str) -> dict:
-
-    if isinstance(raw_data, bytes):
-        raw_text = raw_data.decode('utf-8')
-    else:
-        raw_text = raw_data
-
     # 1. Захист від MagicMock у тестах
     if isinstance(raw_data, (Mock, MagicMock)):
         # Якщо це мок, підставляємо йому тестовий міні-набір даних, щоб тест пройшов
@@ -25,7 +19,6 @@ def parse_co2_mauna_loa(raw_data: str) -> dict:
 
     parsed_results = []
     
-    # Далі твій код без змін:
     f = StringIO(raw_text.strip())
     reader = csv.reader(f)
     

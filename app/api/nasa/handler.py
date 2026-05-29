@@ -11,22 +11,25 @@ from app.api.nasa.ozone import get_latest_nasa_ozone_url, parse_nasa_to_flat_lis
 from app.api.nasa.gmsl_indicator.calculate_index import calculate_gmsl_indicator_index
 from app.api.nasa.gistemp.gistemp_parser import parse_gistemp_data
 
-from app.api.nasa.session import create_nasa_session
+from app.api.nasa import create_nasa_session
 
 
 load_dotenv()
 
 
-session = create_nasa_session()
+
 
 @nasa_bp.route("/")
 def fetch_nasa_home():
-    
+    # session = create_nasa_session()
     return f"NASA home"
 
 @nasa_bp.route(NasaRoutes.GMSL_INDICATOR, methods=["GET", "POST"])
 def fetch_gmsl_indicator_raw():
     endpoint = os.getenv("NASA_SSH_GMSL_INDICATOR_URL", "")
+    
+    session = create_nasa_session()
+    
     raw_data = session.get(endpoint=endpoint, auth_required=True)
     death_index = calculate_gmsl_indicator_index(raw_data)
     return death_index
@@ -34,6 +37,9 @@ def fetch_gmsl_indicator_raw():
 @nasa_bp.route(NasaRoutes.GMSL, methods=["GET", "POST"])
 def fetch_gmsl():
     endpoint = os.getenv("NASA_SSH_GMSL_DATA_URL")
+    
+    session = create_nasa_session()
+    
     raw_data = session.get(endpoint=endpoint, auth_required=True)
     json_data = parse_nasa_nc_data(raw_data)
     return json_data
