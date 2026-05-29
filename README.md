@@ -102,6 +102,9 @@ NOAA_SOLAR_FLUX=/json/f107_cm_flux.json
 NOAA_SUNSPOT=/json/solar-cycle/sunspots.json
 NOAA_KP_INDEX=/json/planetary_k_index_1m.json
 
+PELTIER_BASE_URL=https://www.atmosp.physics.utoronto.ca
+PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
+
 ```
 
 <!-- END_ENV_EXAMPLE -->
@@ -168,6 +171,7 @@ NOAA_KP_INDEX=/json/planetary_k_index_1m.json
 | **OCEAN_PENTAD_HEAT_0_700** | `/api/noaa/ocean_pentad_heat_0_700` |
 | **OZONE** | `/api/nasa/ozone` |
 | **PALEO_SEA_LEVEL** | `/api/noaa/paleo_sea_level` |
+| **PELTIER** | `/api/peltier` |
 | **RELATIVE_SEA_LEVEL** | `/api/noaa/relative_sea_level` |
 | **RELATIVE_SEA_LEVEL_SUMMARY** | `/api/noaa/relative_sea_level_summary` |
 | **SOLAR_FLUX** | `/api/noaa/solar_flux` |
@@ -206,49 +210,53 @@ app/
 │   │   │   ├── fresh_link_generator.py
 │   │   │   └── ozone_data_parser.py
 │   │   └── session.py
-│   └── noaa/
+│   ├── noaa/
+│   │   ├── __init__.py
+│   │   ├── handler.py
+│   │   ├── methane/
+│   │   │   ├── __init__.py
+│   │   │   └── methane_parser.py
+│   │   ├── noaa_ice_extent/
+│   │   │   ├── __init__.py
+│   │   │   └── noaa_ice_data_parser.py
+│   │   ├── ocean_pentad_heat/
+│   │   │   ├── __init__.py
+│   │   │   └── ocean_pentad_heat_data.py
+│   │   ├── paleo_sea_level/
+│   │   │   ├── __init__.py
+│   │   │   └── noaa_paleo_parser.py
+│   │   ├── ratpac_a/
+│   │   │   ├── __init__.py
+│   │   │   └── ratpac_text_parser.py
+│   │   ├── relative_sea_level/
+│   │   │   ├── __init__.py
+│   │   │   └── relative_sea_level_parser.py
+│   │   ├── relative_sea_level_summary/
+│   │   │   ├── __init__.py
+│   │   │   └── relative_sea_level_summary_parser.py
+│   │   ├── session.py
+│   │   └── vostok/
+│   │       ├── __init__.py
+│   │       ├── ch4nat/
+│   │       │   ├── __init__.py
+│   │       │   └── vostok_ch4nat_parser.py
+│   │       ├── co2nat/
+│   │       │   ├── __init__.py
+│   │       │   └── vostok_co2_nat_parser.py
+│   │       ├── dustnat_noaa/
+│   │       │   ├── __init__.py
+│   │       │   └── dustnat_noaa_parser.py
+│   │       ├── handler.py
+│   │       ├── n2o_iso/
+│   │       │   ├── __init__.py
+│   │       │   └── n2o_iso_parser.py
+│   │       └── temp/
+│   │           ├── __init__.py
+│   │           └── vostok_temp_parser.py
+│   └── peltier/
 │       ├── __init__.py
 │       ├── handler.py
-│       ├── methane/
-│       │   ├── __init__.py
-│       │   └── methane_parser.py
-│       ├── noaa_ice_extent/
-│       │   ├── __init__.py
-│       │   └── noaa_ice_data_parser.py
-│       ├── ocean_pentad_heat/
-│       │   ├── __init__.py
-│       │   └── ocean_pentad_heat_data.py
-│       ├── paleo_sea_level/
-│       │   ├── __init__.py
-│       │   └── noaa_paleo_parser.py
-│       ├── ratpac_a/
-│       │   ├── __init__.py
-│       │   └── ratpac_text_parser.py
-│       ├── relative_sea_level/
-│       │   ├── __init__.py
-│       │   └── relative_sea_level_parser.py
-│       ├── relative_sea_level_summary/
-│       │   ├── __init__.py
-│       │   └── relative_sea_level_summary_parser.py
-│       ├── session.py
-│       └── vostok/
-│           ├── __init__.py
-│           ├── ch4nat/
-│           │   ├── __init__.py
-│           │   └── vostok_ch4nat_parser.py
-│           ├── co2nat/
-│           │   ├── __init__.py
-│           │   └── vostok_co2_nat_parser.py
-│           ├── dustnat_noaa/
-│           │   ├── __init__.py
-│           │   └── dustnat_noaa_parser.py
-│           ├── handler.py
-│           ├── n2o_iso/
-│           │   ├── __init__.py
-│           │   └── n2o_iso_parser.py
-│           └── temp/
-│               ├── __init__.py
-│               └── vostok_temp_parser.py
+│       └── peltier_data_parser.py
 ├── constants/
 │   ├── __init__.py
 │   ├── blueprints_names.py
@@ -258,6 +266,7 @@ app/
     ├── csv_converter.py
     ├── custom_json_provider.py
     ├── date_parsers.py
+    ├── decompress_gz.py
     ├── extract_file_from_zip.py
     └── http_request.py
 ├── main.py

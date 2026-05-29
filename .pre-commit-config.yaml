@@ -1,3 +1,5 @@
+default_stages: [pre-commit]
+
 repos:
   - repo: local
     hooks:
@@ -10,7 +12,8 @@ repos:
 
       - id: poetry-export
         name: Poetry Export Requirements
-        entry: poetry export -f requirements.txt --output requirements.txt --without-hashes
+        # cmd /c викликає глобальну poetry, яка надійно відпрацює у Windows
+        entry: cmd /c poetry export -f requirements.txt --output requirements.txt --without-hashes
         language: system
         pass_filenames: false
         always_run: true

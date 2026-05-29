@@ -28,6 +28,7 @@ class BaseRoutes:
 class ApiRoutes:
     NASA = "/nasa"
     NOAA = "/noaa"
+    PELTIER = "/peltier"
 
 @register_routes
 @with_prefix(f"{BaseRoutes.API}{ApiRoutes.NOAA}")

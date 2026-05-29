@@ -3,3 +3,4 @@ class Blueprints:
     NOAA = "noaa"
     NASA = "nasa"
     VOSTOK = "vostok"
+    PELTIER = "peltier"
