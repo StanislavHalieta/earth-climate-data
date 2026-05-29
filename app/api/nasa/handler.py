@@ -1,10 +1,12 @@
 import os
 from dotenv import load_dotenv
 
+
 from app.constants import NasaRoutes
 
 from app.api.nasa import nasa_bp
 from app.api.nasa.gmsl import parse_nasa_nc_data
+from app.api.nasa.stratospheric_aerosol import parse_stratospheric_aerosol
 from app.api.nasa.ozone import get_latest_nasa_ozone_url, parse_nasa_to_flat_list
 from app.api.nasa.gmsl_indicator.calculate_index import calculate_gmsl_indicator_index
 from app.api.nasa.gistemp.gistemp_parser import parse_gistemp_data
@@ -57,3 +59,15 @@ def fetch_gistemp():
     parsed_gistemp_data = parse_gistemp_data(raw_data)
     
     return parsed_gistemp_data
+
+@nasa_bp.route(NasaRoutes.STRATOSPHERIC_AEROSOL)
+def fetch_stratospheric_aerosols():
+    base_url = os.getenv("NASA_GISS_BASE_URL")
+    endpoint = os.getenv("NASA_GISSTEMP")
+    
+    session = create_nasa_session(base_url=base_url)
+    
+    raw_data = session.get(endpoint=endpoint, auth_required=True)  
+    parsed_data = parse_stratospheric_aerosol(raw_data)
+    
+    return parsed_data

@@ -53,9 +53,31 @@ poetry run pre-commit install
 * **Оновлення ендпоінтів:** Автоматично збираються нові маршрути в таблицю `📑 Кінцеві точки`.
 
 Якщо ви хочете запустити генерацію дерева та ендпоінтів вручну (без створення коміту), виконайте:
-```bash
-  poetry run pre-commit run --all-files
-```
+  ```bash
+    poetry run pre-commit run --all-files
+  ```
+
+### ➕ Робота з бібліотеками
+
+* **Додати нову бібліотеку:**
+  ```bash
+  poetry add <назва_бібліотеки>
+  ```
+* **Додати бібліотеку для розробки/тестів:**
+  ```bash
+  poetry add <назва_бібліотеки> --group dev
+  ```
+* **Видалити бібліотеку:**
+  ```bash
+  poetry remove <назва_бібліотеки>
+  ```
+* **Оновити бібліотеки до свіжих версій:**
+  ```bash
+  poetry update
+  ```
+
+## 🧪 Тестування
+Для перевірки працездатності сервера використовується фреймворк `pytest`. Наразі реалізовано базові тести для перевірки доступності кінцевих точок (endpoints). У планах — розширення тестового покриття для парсерів бінарних NetCDF4 файлів та логіки авторизації в NASA Earthdata.
 
 
 ## ⚙️ Налаштування оточення (`.env`)
@@ -66,7 +88,7 @@ poetry run pre-commit install
 <!-- START_ENV_EXAMPLE -->
 
 ```env
-FLASK_ENV=False
+FLASK_ENV=True
 
 #START_ACCESS
 NASA_USER=
@@ -81,6 +103,8 @@ NASA_GISS_BASE_URL=https://data.giss.nasa.gov
 NASA_SSH_GMSL_INDICATOR_URL=/podaac-ops-cumulus-protected/NASA_SSH_GMSL_INDICATOR/NASA_SSH_GMSL_INDICATOR.txt
 NASA_SSH_GMSL_DATA_URL=/podaac-ops-cumulus-protected/JPL_RECON_GMSL/global_timeseries_measures.nc
 NASA_GISSTEMP=/gistemp/tabledata_v4/GLB.Ts+dSST.csv
+NASA_STRATOSPHERIC_AEROSOL=modelforce/strataer/original_GISS_data/tau.line_2012.12.txt
+
 
 OPENDAP_URL=https://opendap.earthdata.nasa.gov
 CSL_URL=/collections/C2491724765-POCLOUD/granules/global_timeseries_measures.dap.csv
@@ -121,28 +145,6 @@ PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
 <!-- END_ENV_EXAMPLE -->
 
 
-## 🧪 Тестування
-Для перевірки працездатності сервера використовується фреймворк `pytest`. Наразі реалізовано базові тести для перевірки доступності кінцевих точок (endpoints). У планах — розширення тестового покриття для парсерів бінарних NetCDF4 файлів та логіки авторизації в NASA Earthdata.
-
-### ➕ Робота з бібліотеками
-
-* **Додати нову бібліотеку:**
-  ```bash
-  poetry add <назва_бібліотеки>
-  ```
-* **Додати бібліотеку для розробки/тестів:**
-  ```bash
-  poetry add <назва_бібліотеки> --group dev
-  ```
-* **Видалити бібліотеку:**
-  ```bash
-  poetry remove <назва_бібліотеки>
-  ```
-* **Оновити бібліотеки до свіжих версій:**
-  ```bash
-  poetry update
-  ```
-
 ## 📑 Кінцеві точки (Endpoints)
 
 Доступні маршрути для отримання оброблених кліматичних даних:
@@ -177,6 +179,7 @@ PELTIER_DATA=/~peltier/datasets/Ice7G_NA_VM7/I7G_NA.VM7_1deg.26.nc.gz
 | **RELATIVE_SEA_LEVEL_SUMMARY** | `/api/noaa/relative_sea_level_summary` |
 | **SOLAR_FLUX** | `/api/noaa/solar_flux` |
 | **SOUTH_ICE** | `/api/noaa/south_ice_extent` |
+| **STRATOSPHERIC_AEROSOL** | `/api/nasa/stratospheric_aerosol` |
 | **SUNSPOT** | `/api/noaa/sunpot` |
 | **TEMP** | `/api/noaa/vostok/temp` |
 | **VOSTOK** | `/api/noaa/vostok` |
@@ -210,7 +213,10 @@ app/
 │   │   │   ├── __init__.py
 │   │   │   ├── fresh_link_generator.py
 │   │   │   └── ozone_data_parser.py
-│   │   └── session.py
+│   │   ├── session.py
+│   │   └── stratospheric_aerosol/
+│   │       ├── __init__.py
+│   │       └── stratospheric_aerosol_parser.py
 │   ├── noaa/
 │   │   ├── __init__.py
 │   │   ├── handler.py

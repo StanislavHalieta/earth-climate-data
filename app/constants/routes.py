@@ -55,6 +55,7 @@ class NasaRoutes:
     GMSL = "/gmsl"
     OZONE = "/ozone"
     GISTEMP = "/gistemp"
+    STRATOSPHERIC_AEROSOL="/stratospheric_aerosol"
 
 @register_routes
 @with_prefix(f"{BaseRoutes.API}{ApiRoutes.NOAA}{NoaaRoutes.VOSTOK}")
