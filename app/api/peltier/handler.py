@@ -8,6 +8,7 @@ load_dotenv()
 
 db = DatabaseService()
 
+
 @peltier_bp.route("/")
 def get_peltier_home():
     return db.get_metric("peltier_data")

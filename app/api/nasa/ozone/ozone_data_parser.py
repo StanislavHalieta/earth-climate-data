@@ -1,5 +1,6 @@
 import io
 
+
 def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
     """
     Парсить оригінальний текстовий дамп HE5 файлу від NASA.
@@ -13,15 +14,10 @@ def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
     lines = text_data.splitlines()
 
     # Словник для збереження чистих "пласких" списків значень по секціях
-    sections_data = {
-        "lon": [],
-        "lat": [],
-        "SolarZenithAngle": [],
-        "ColumnAmountO3": []
-    }
+    sections_data = {"lon": [], "lat": [], "SolarZenithAngle": [], "ColumnAmountO3": []}
 
     current_section = None
-    FILL_VALUE = -1.26765e+30
+    FILL_VALUE = -1.26765e30
 
     for line in lines:
         line_stripped = line.strip()
@@ -31,7 +27,7 @@ def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
         # Визначаємо, в якій ми секції. Перевіряємо початок рядка
         if line_stripped.startswith("/lon"):
             current_section = "lon"
-            raw_text = line_stripped[4:].lstrip(",") # прибираємо префікс "/lon,"
+            raw_text = line_stripped[4:].lstrip(",")  # прибираємо префікс "/lon,"
         elif line_stripped.startswith("/lat"):
             current_section = "lat"
             raw_text = line_stripped[4:].lstrip(",")
@@ -41,7 +37,12 @@ def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
         elif line_stripped.startswith("/ColumnAmountO3"):
             current_section = "ColumnAmountO3"
             raw_text = line_stripped[15:].lstrip(",")
-        elif line_stripped.startswith("/ViewingZenithAngle") or line_stripped.startswith("/RadiativeCloudFraction") or line_stripped.startswith("/UVAerosolIndex") or line_stripped.startswith("/StructMetadata_0"):
+        elif (
+            line_stripped.startswith("/ViewingZenithAngle")
+            or line_stripped.startswith("/RadiativeCloudFraction")
+            or line_stripped.startswith("/UVAerosolIndex")
+            or line_stripped.startswith("/StructMetadata_0")
+        ):
             # Нам ці секції не потрібні, або це кінець файлу
             current_section = None
             continue
@@ -67,7 +68,7 @@ def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
     # --- Нарізка пласких списків у матриці 180 строк на 360 стовпчиків ---
     # Перевіряємо, чи збігаються розміри
     rows, cols = 180, 360
-    
+
     sza_matrix = []
     ozone_matrix = []
 
@@ -78,11 +79,11 @@ def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
     for i in range(rows):
         start_idx = i * cols
         end_idx = start_idx + cols
-        
+
         # Нарізаємо SZA
         row_sza = sza_flat[start_idx:end_idx]
         sza_matrix.append(row_sza)
-        
+
         # Нарізаємо Ozone
         row_ozone = ozone_flat[start_idx:end_idx]
         ozone_matrix.append(row_ozone)
@@ -91,14 +92,13 @@ def parse_nasa_ozone_csv(binary_content: bytes) -> dict:
         "lat": sections_data["lat"],
         "lon": sections_data["lon"],
         "solar_zenith_angle": sza_matrix,
-        "ozone": ozone_matrix
+        "ozone": ozone_matrix,
     }
-    
+
+
 def parse_nasa_to_flat_list(binary_content: bytes) -> list:
     if isinstance(binary_content, (dict, list)):
-        return (
-            binary_content  # або витягуємо потрібний ключ, наприклад: raw_data.get('data', raw_data)
-        )
+        return binary_content  # або витягуємо потрібний ключ, наприклад: raw_data.get('data', raw_data)
 
     # 2. Перевірка на байти
     if isinstance(binary_content, bytes):
@@ -107,16 +107,12 @@ def parse_nasa_to_flat_list(binary_content: bytes) -> list:
         text_data = binary_content
     else:
         # Якщо прийшло щось зовсім дивне (наприклад, None або число)
-        raise TypeError(
-            f"Неочікуваний тип даних для парсингу: {type(binary_content)}"
-        )
+        raise TypeError(f"Неочікуваний тип даних для парсингу: {type(binary_content)}")
 
     # Тепер splitlines() ніколи не впаде
     lines = text_data.splitlines()
 
-    sections_data = {
-        "lon": [], "lat": [], "SolarZenithAngle": [], "ColumnAmountO3": []
-    }
+    sections_data = {"lon": [], "lat": [], "SolarZenithAngle": [], "ColumnAmountO3": []}
     current_section = None
 
     # 1. Збираємо всі числа з файлу по своїх секціях
@@ -137,7 +133,9 @@ def parse_nasa_to_flat_list(binary_content: bytes) -> list:
         elif line_stripped.startswith("/ColumnAmountO3"):
             current_section = "ColumnAmountO3"
             raw_text = line_stripped[15:].lstrip(",")
-        elif line_stripped.startswith("/ViewingZenithAngle") or line_stripped.startswith("/StructMetadata_0"):
+        elif line_stripped.startswith(
+            "/ViewingZenithAngle"
+        ) or line_stripped.startswith("/StructMetadata_0"):
             current_section = None
             continue
         else:
@@ -154,8 +152,8 @@ def parse_nasa_to_flat_list(binary_content: bytes) -> list:
 
     # 2. Мапуємо координати та виміри (ПРАВИЛЬНО)
     result_points = []  # Ініціалізуємо ОДИН РАЗ тут, а не всередині циклу!
-    
-    latitudes = sections_data["lat"]   # 180 значень
+
+    latitudes = sections_data["lat"]  # 180 значень
     longitudes = sections_data["lon"]  # 360 значень
     sza_flat = sections_data["SolarZenithAngle"]
     ozone_flat = sections_data["ColumnAmountO3"]
@@ -168,17 +166,21 @@ def parse_nasa_to_flat_list(binary_content: bytes) -> list:
         for x in range(total_lons):
             # Обчислюємо точний індекс елемента в пласкому масиві
             flat_index = y * total_lons + x
-            
+
             # Безпечно беремо значення
-            sza_val = sza_flat[flat_index] if flat_index < len(sza_flat) else -1.26765e+30
-            ozone_val = ozone_flat[flat_index] if flat_index < len(ozone_flat) else -1.26765e+30
+            sza_val = (
+                sza_flat[flat_index] if flat_index < len(sza_flat) else -1.26765e30
+            )
+            ozone_val = (
+                ozone_flat[flat_index] if flat_index < len(ozone_flat) else -1.26765e30
+            )
 
             # Формуємо точку і додаємо її в загальний список
             point = {
                 "lat": latitudes[y],
                 "lon": longitudes[x],
                 "ozone": ozone_val,
-                "solar_zenith_angle": sza_val
+                "solar_zenith_angle": sza_val,
             }
             result_points.append(point)
 

@@ -1,13 +1,13 @@
 def parse_ratpac_data(raw_text: str) -> dict:
     """
-    Парсить файл RATPAC-A від NOAA, динамічно розбиваючи дані за регіонами 
+    Парсить файл RATPAC-A від NOAA, динамічно розбиваючи дані за регіонами
     (NH, SH, GL тощо) для максимальної читабельності JSON структури.
     """
     if not raw_text or not isinstance(raw_text, str):
         return {}
-    
+
     lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
-    
+
     result_data = {}
     current_region = "UNKNOWN"
     headers = []

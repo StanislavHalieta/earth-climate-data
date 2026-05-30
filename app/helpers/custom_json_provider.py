@@ -1,5 +1,5 @@
-from flask.json.provider import DefaultJSONProvider  
-import numpy as np                                   
+from flask.json.provider import DefaultJSONProvider
+import numpy as np
 
 
 class CustomJSONProvider(DefaultJSONProvider):
@@ -12,6 +12,6 @@ class CustomJSONProvider(DefaultJSONProvider):
             if isinstance(o, np.ndarray):
                 return o.tolist()
             return super().default_encoder(o)
-        
-        kwargs['default'] = default_encoder
+
+        kwargs["default"] = default_encoder
         return super().dumps(obj, **kwargs)

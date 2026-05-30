@@ -1,45 +1,60 @@
 # .pre-commit-config.yaml
 default_stages: [pre-commit]
+fail_fast: false
 
 repos:
   - repo: local
     hooks:
-      # 1. Спершу запускаємо генератор тестів, щоб папка tests/ завжди була актуальною
-      - id: generate-universal-tests
-        name: 🧪 Auto-generate universal tests
-        entry: cmd /c poetry run python generate_tests.py
+      # 1. ФОРМАТ: Причісуємо весь написаний код (ТЗ - Пункт 1)
+      - id: black-format
+        name: 🎨 [ТЗ-1] Auto-format code style with Black
+        entry: cmd /c "poetry run black app/ tests/ && git add ."
         language: system
         pass_filenames: false
         always_run: true
+        stages: [manual]
 
-      # 2. Оновлюємо документацію README на основі роутів
+      # 2. РОЗУМНА ГЕНЕРАЦІЯ: Оновлюємо тести, тільки якщо є зміни (ТЗ - Пункт 2)
+      - id: generate-universal-tests
+        name: 🧪 [ТЗ-2] Smart test generation
+        entry: cmd /c "poetry run python generate_tests.py && git add ."
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [manual]
+
+      # Додатково: Оновлення документації README
       - id: update-readme-endpoints
         name: 📝 Auto-update README docs
         entry: cmd /c poetry run python update_docs.py
         language: system
         files: ^app/constants/routes\.py$
         pass_filenames: false
+        stages: [manual]
 
-      # 3. Експортуємо залежності у requirements.txt для Render
+      # Додатково: Експорт залежностей для Render
       - id: poetry-export
         name: 📦 Poetry Export Requirements
         entry: cmd /c poetry run poetry export -f requirements.txt --output requirements.txt --without-hashes
         language: system
         pass_filenames: false
         always_run: true
+        stages: [manual]
 
-      # 4. Автоматично додаємо всі згенеровані зміни (тести, реквáйрментс, рідмі) до поточного коміту
-      - id: git-add-generated-files
-        name: 🔄 Git add auto-generated changes
-        entry: cmd /c git add tests/test_all_parsers.py requirements.txt README.md
+      # 3. ІНДЕКСАЦІЯ: Примусово закидаємо всі зміни в Git (ТЗ - Пункт 3)
+      - id: git-add-auto
+        name: 🔄 [ТЗ-3] Git add all auto-generated changes
+        entry: cmd /c git add .
         language: system
         pass_filenames: false
         always_run: true
+        stages: [manual]
 
-      # 5. Фінальний акорд: запускаємо тести. Якщо вони впадуть — коміт заблокується
+      # 4. ВЕРИФІКАЦІЯ: Запуск оновлених тестів на чистому коді (ТЗ - Пункт 4)
       - id: run-tests
-        name: 🚀 Run Pytest verification
+        name: 🚀 [ТЗ-4] Run Pytest verification
         entry: cmd /c set PYTHONPATH=.&& poetry run python -m pytest
         language: system
         pass_filenames: false
         always_run: true
+        stages: [manual, pre-commit]

@@ -3,7 +3,6 @@ import os
 import sys
 import re
 
-# Примусово налаштовуємо вивід у консоль Windows, щоб уникнути помилок кодування
 if sys.platform == "win32":
     import sys, io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
@@ -11,8 +10,8 @@ if sys.platform == "win32":
 WHITE_LIST = ["test_all_handlers.py", "test_all_parsers.py", "conftest.py", "__init__.py"]
 
 def cleanup_old_tests():
-    """Повністю вичищає папку tests/, залишаючи ТІЛЬКИ головні універсальні файли."""
-    print("[CLEANUP] Ochyschennya papky tests/ vid zastarilyh fayliv...")
+    """Вичищає застарілі файли-заглушки."""
+    print("[CLEANUP] Ochyschennya papky tests/...")
     if not os.path.exists("tests"):
         return
 
@@ -26,16 +25,15 @@ def cleanup_old_tests():
                     deleted_count += 1
                 except Exception as e:
                     print(f"Error deleting {file}: {e}")
-    print(f"[CLEANUP] Completed! Deleted files: {deleted_count}\n")
+    print(f"[CLEANUP] Completed! Deleted: {deleted_count}\n")
 
 
 def generate_universal_parsers_test():
-    """Сканує проект, знаходить усі парсери за допомогою RegEx та збирає файл тесту."""
+    """Сканує проект, знаходить усі парсери та збирає файл тесту."""
     print("[SCANNING] Poshuk funktsiy parsingu v app/api/...")
     
     import_lines = []
     map_lines = []
-    
     parser_pattern = re.compile(r"^def\s+(parse_[a-zA-Z0-9_]+)\s*\(")
 
     for root, _, files in os.walk("app/api"):
@@ -116,7 +114,20 @@ def generate_universal_parsers_test():
     )
 
     os.makedirs("tests", exist_ok=True)
-    with open("tests/test_all_parsers.py", "w", encoding="utf-8") as f:
+    test_file_path = "tests/test_all_parsers.py"
+
+    # 🔍 ПЕРЕВІРКА ЗА ТЗ: порівнюємо чисті нормалізовані рядки
+    if os.path.exists(test_file_path):
+        with open(test_file_path, "r", encoding="utf-8") as f:
+            existing_content = f.read().replace("\r", "").strip()
+        
+        normalized_new_content = test_file_content.replace("\r", "").strip()
+        
+        if existing_content == normalized_new_content:
+            print("[SKIPPED] Файл тестів уже актуальний, перезапис не потрібен.")
+            return
+
+    with open(test_file_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(test_file_content)
     print("[GENERATED] File tests/test_all_parsers.py successfully updated!")
 

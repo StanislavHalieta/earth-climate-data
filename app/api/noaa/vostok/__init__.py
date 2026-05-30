@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from app.constants import (Blueprints, NoaaRoutes)
+from app.constants import Blueprints, NoaaRoutes
 
 from app.api.noaa.vostok.co2nat.vostok_co2_nat_parser import parse_vostok_co2_data
 from app.api.noaa.vostok.ch4nat.vostok_ch4nat_parser import parse_vostok_ch4_data
@@ -18,5 +18,5 @@ __all__ = [
     "parse_vostok_ch4_data",
     "parse_vostok_dust_data",
     "parse_vostok_recent_temp",
-    "parse_vostok_n2o_iso_data"
+    "parse_vostok_n2o_iso_data",
 ]
